@@ -1,0 +1,17 @@
+﻿Build started 2/20/2010 1:20:43 AM.
+     1>Project "\\bh-srv-2\share\race_technology\converters\iLogger2\iLogger2.vcxproj" on node 50 (build target(s)).
+     1>_PrepareForBuild:
+         Creating "Debug\iLogger2.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         iLogger2.vcxproj -> \\bh-srv-2\share\race_technology\converters\Debug\iLogger2.exe
+       _AfterBuild:
+         Deleting file "Debug\iLogger2.unsuccessfulbuild".
+         Touching "Debug\iLogger2.lastbuildstate".
+     1>Done Building Project "\\bh-srv-2\share\race_technology\converters\iLogger2\iLogger2.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.20
