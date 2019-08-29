@@ -14,15 +14,17 @@
 
 void process_file(char * input_file_name)
 {
-	char * output_file_name = (char *) malloc(strlen(input_file_name) + 7);
+    size_t len = strlen(input_file_name) + 7;
+	char * output_file_name = (char *) malloc(len);
 
-	strcpy(output_file_name, input_file_name);
+	strcpy_s(output_file_name, len, input_file_name);
 
 	char * extension = strrchr(output_file_name, '.');
 
 	if (extension != NULL && strcmp(extension,".run")==0)
 	{
-		sprintf(extension, ".clean.run");
+        size_t extension_len = len - (extension - output_file_name);
+		sprintf_s(extension, extension_len, ".clean.run");
 
 		c_run run;
 		 

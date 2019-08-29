@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "track_path.h"
 #include "..\common\math_util.h"
 

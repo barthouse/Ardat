@@ -12,7 +12,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	if (argc != 2)
 	{
-		printf("usage: %s <input_irt>\n");
+		printf("usage: %s <input_irt>\n", argv[0]);
 	}
 	else
 	{

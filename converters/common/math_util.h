@@ -3,8 +3,8 @@
 #include <math.h>
 #include <list>
 
-#define max(x,y) (x>y?x:y)
-#define min(x,y) (x<y?x:y)
+//#define max(x,y) (x>y?x:y)
+//#define min(x,y) (x<y?x:y)
 
 double scalar_lerp(double a, double b, double lerp);
 

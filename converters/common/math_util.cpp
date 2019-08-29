@@ -80,7 +80,10 @@ bool Line2d::LinearRegression(Point2dList * inLineList)
 	double sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0;
 	double n = 0;
 
-	double minx, miny, maxx, maxy;
+	double minx = 0;
+    double miny = 0;
+    double maxx = 0;
+    double maxy = 0;
 
 	Point2dList::iterator i = inLineList->begin();
 
@@ -93,7 +96,7 @@ bool Line2d::LinearRegression(Point2dList * inLineList)
 
 		while(i != inLineList->end())
 		{
-			Point2d * point = (*i);
+			point = (*i);
 
 			sx += point->m_x;
 			sy += point->m_y;

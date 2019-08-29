@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
 	char track_path[128];
 	e_car car = e_car_unknown;
 	e_track track = e_track_unknown;
-	struct tm timeinfo;
+    struct tm timeinfo = { 0 };
 	strcpy_s(track_path, sizeof(track_path), "unknown");
 	
 	TrackPath		trackPath;

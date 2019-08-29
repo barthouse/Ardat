@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "track_guide.h"
 #include "..\common\math_util.h"
 
@@ -1145,7 +1146,7 @@ void TrackGuide::Sample(double inTrackPercentage, double inX, double inY, double
 
 					double x = scalar_lerp(m_lastX, inX, lerp);
 					double y = scalar_lerp(m_lastY, inY, lerp);
-					double z = scalar_lerp(m_lastZ, inZ, lerp);
+//					double z = scalar_lerp(m_lastZ, inZ, lerp);
 
 					fprintf(m_crossOutput, "%f %f\n", x, y);
 

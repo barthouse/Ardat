@@ -145,7 +145,7 @@ c_channel_data * c_channel_data::contruct(unsigned char * in_data, int in_data_l
 	e_channel channel = get_channel_from_data(in_data[0]);
 	assert(channel!=e_channel_invalid);
 
-	unsigned int data_length = get_data_length_from_channel(channel);
+	int data_length = get_data_length_from_channel(channel);
 	assert(data_length==in_data_length);
 
 	c_channel_data * channel_data = NULL;
@@ -297,12 +297,12 @@ unsigned char * c_channel_data::get_data(void)
 
 void c_channel_data::get_csv_data(c_csv_data * in_csv_data)
 {
-	// do nothing
+    in_csv_data;
 }
 
 void c_channel_data::get_run_sample_data(c_run_sample * in_run_sample)
 {
-	// do nothing
+	in_run_sample;
 }
 
 
@@ -829,7 +829,7 @@ c_analog_data::c_analog_data(unsigned int in_input, unsigned int in_value)
 
 	int i = 0;
 
-	m_data[i++] = input_to_channel(m_input);
+	m_data[i++] = (unsigned char) input_to_channel(m_input);
 	m_data[i++] = (unsigned char) ((m_value >> 8) & 0xff);
 	m_data[i++] = (unsigned char) (m_value & 0xff);
 	m_data[i++] = calculate_checksum(m_data, k_data_length - 1);
@@ -1104,7 +1104,7 @@ void c_channel_data_decoder::begin(const char * in_file_name)
 
 					size_t data_read = fread(data, 1, data_length, file);
 
-					if (data_read == data_length)
+					if (data_read == (size_t) data_length)
 					{
 						if (data[0]==0x98 && data[1]==0x1D && data[2]==0 && data[3]==0 &&
 							data[4]==0xC8 && data[5]==0 && data[6]==0 && data[7]==0)
