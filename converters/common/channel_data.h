@@ -84,9 +84,13 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
+    virtual void write_txt(FILE * file);
+
 	void write_run_data(FILE * in_output_file);
 
 protected:
+
+    void write_txt_data(FILE * file);
 
 	c_channel_data(void);
 
@@ -111,6 +115,8 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
+    virtual void write_txt(FILE * file);
+
 private:
 
 };
@@ -125,6 +131,8 @@ public:
 
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
+
+    virtual void write_txt(FILE * file);
 
 private:
 
@@ -141,6 +149,8 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
+    virtual void write_txt(FILE * file);
+
 private:
 
 };
@@ -155,6 +165,8 @@ public:
 
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
+
+    virtual void write_txt(FILE * file);
 
 private:
 
@@ -175,7 +187,9 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
-	double m_lateral_acceleration;
+    virtual void write_txt(FILE * file);
+
+    double m_lateral_acceleration;
 	double m_longitudinal_acceleration;
 
 private:
@@ -200,7 +214,9 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
-	double m_time_stamp;
+    virtual void write_txt(FILE * file);
+
+    double m_time_stamp;
 
 private:
 
@@ -223,7 +239,9 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
-	double m_longitude;
+    virtual void write_txt(FILE * file);
+
+    double m_longitude;
 	double m_latitude;
 	double m_accuracy;
     double m_x;
@@ -252,7 +270,9 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
-	double m_gps_speed;				// meters per second
+    virtual void write_txt(FILE * file);
+
+    double m_gps_speed;				// meters per second
 	double m_gps_speed_accuracy;
 
 private:
@@ -274,6 +294,8 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
+    virtual void write_txt(FILE * file);
+
 private:
 
 };
@@ -288,6 +310,8 @@ public:
 
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
+
+    virtual void write_txt(FILE * file);
 
 private:
 
@@ -304,7 +328,9 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
-	unsigned int channel_to_input(e_channel in_channel);
+    virtual void write_txt(FILE * file);
+
+    unsigned int channel_to_input(e_channel in_channel);
 	e_channel input_to_channel(unsigned int in_input);
 
 private:
@@ -330,7 +356,9 @@ public:
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
-	double m_rpm;
+    virtual void write_txt(FILE * file);
+
+    double m_rpm;
 
 private:
 
@@ -355,7 +383,9 @@ public:
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 
-	static unsigned int channel_to_input(e_channel in_channel);
+    virtual void write_txt(FILE * file);
+
+    static unsigned int channel_to_input(e_channel in_channel);
 	static e_channel input_to_channel(unsigned int in_input);
 
 private:
@@ -378,6 +408,8 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
+    virtual void write_txt(FILE * file);
+
 private:
 
 };
@@ -393,6 +425,8 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
+    virtual void write_txt(FILE * file);
+
 private:
 
 };
@@ -407,6 +441,8 @@ public:
 
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
+
+    virtual void write_txt(FILE * file);
 
     double m_z; // mm
     double m_accuracy;  // mm
@@ -428,7 +464,9 @@ public:
 	virtual void get_description(char * in_buffer, int in_buffer_length);
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 
-	e_track	m_track;
+    virtual void write_txt(FILE * file);
+
+    e_track	m_track;
 	e_car	m_car;
 
 };
