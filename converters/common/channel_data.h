@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdint.h>
 #include "run_data.h"
 
 class c_csv_data;
@@ -67,6 +68,8 @@ class c_channel_data
 {
 public:
 
+	static const unsigned int k_max_data_length = 32;
+
 	c_channel_data(unsigned char * in_data, int in_data_length);
 
 	virtual void get_description(char * in_buffer, int in_buffer_length) = 0;
@@ -79,24 +82,25 @@ public:
 	static e_channel get_channel_from_data(unsigned char in_data);
 	static int get_data_length_from_channel(e_channel in_channel);
 	static c_channel_data * contruct(unsigned char * in_data, int in_data_length);
+    static const char * get_channel_name(e_channel in_channel);
 
 	virtual void set_data(unsigned char * in_data, int in_data_length);
 	virtual void get_csv_data(c_csv_data * in_csv_data);
 	virtual void get_run_sample_data(c_run_sample * in_run_sample);
 
     virtual void write_txt(FILE * file);
+    void write_run(FILE * file);
 
 	void write_run_data(FILE * in_output_file);
 
 protected:
 
     void write_txt_data(FILE * file);
+    void write_txt_channel(FILE * file);
 
 	c_channel_data(void);
 
 	unsigned char calculate_checksum(unsigned char * in_data, int in_data_length);
-
-	static const unsigned int k_max_data_length = 32;
 
 	bool m_valid;
 	e_channel m_channel;
@@ -142,7 +146,7 @@ class c_logger_serial_number : public c_channel_data
 {
 public:
 
-	enum { k_data_length = 6 };
+    enum { k_data_length = 6 };
 
 	c_logger_serial_number(unsigned char * in_data, int in_data_length) { set_data(in_data, in_data_length); }
 
@@ -151,7 +155,9 @@ public:
 
     virtual void write_txt(FILE * file);
 
-private:
+    uint16_t    m_serial_number;
+    uint8_t     m_software_version;
+    uint8_t     m_bootloader_version;
 
 };
 
@@ -489,5 +495,22 @@ private:
 	int m_data_length;
 	int m_data_position;
 	unsigned char * m_data;
+
+};
+
+class c_txt_decoder
+{
+public:
+
+	c_txt_decoder(void);
+
+	void begin(const char * in_file_name);
+	void end(void);
+
+	c_channel_data * get_channel_data(void);
+
+private:
+
+    FILE * m_file;
 
 };

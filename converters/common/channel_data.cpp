@@ -8,6 +8,68 @@
 #include <memory.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <string.h>
+
+const char * c_channel_data::get_channel_name(e_channel in_channel)
+{
+	switch(in_channel)
+	{
+	case e_channel_run_information: return "RUN_INFORMATION";
+	case e_channel_start_stop:  return "START_STOP";
+	case e_channel_logger_serial_number:  return "LOGGER_SERIAL_NUMBER";
+	case e_channel_gps_time_of_week:  return "GPS_TIME_OF_WEEK";
+	case e_channel_acceleration_data:  return "ACCELERATION_DATA";
+	case e_channel_time_stamp:  return "TIME_STAMP";
+	case e_channel_gps_position:  return "GPS_POSITION";
+	case e_channel_gps_speed:  return "GPS_SPEED";
+	case e_channel_beacon_pulse:  return "BEACON_PULSE";
+	case e_channel_gps_pulse:  return "GPS_PULSE";
+	case e_channel_frequency_2: return "FREQUENCY_2";
+	case e_channel_frequency_3: return "FREQUENCY_3";
+	case e_channel_frequency_4: return "FREQUENCY_4";
+	case e_channel_frequency_1: return "FREQUENCY_1";
+	case e_channel_rpm: return "RPM";
+	case e_channel_analog_7: return "ANALOG_7";
+	case e_channel_analog_5: return "ANALOG_5";
+	case e_channel_analog_6: return "ANALOG_6";
+	case e_channel_analog_4: return "ANALOG_4";
+	case e_channel_analog_3: return "ANALOG_3";
+	case e_channel_analog_1: return "ANALOG_1";
+	case e_channel_analog_2: return "ANALOG_2";
+	case e_channel_analog_0: return "ANALOG_0";
+	case e_channel_analog_15: return "ANALOG_15";
+	case e_channel_analog_13: return "ANALOG_13";
+	case e_channel_analog_14: return "ANALOG_14";
+	case e_channel_analog_12: return "ANALOG_12";
+	case e_channel_analog_11: return "ANALOG_11";
+	case e_channel_analog_9: return "ANALOG_9";
+	case e_channel_analog_10: return "ANALOG_10";
+	case e_channel_analog_8: return "ANALOG_8";
+	case e_channel_analog_16: return "ANALOG_16";
+	case e_channel_analog_17: return "ANALOG_17";
+	case e_channel_analog_18: return "ANALOG_18";
+	case e_channel_analog_19: return "ANALOG_19";
+	case e_channel_analog_20: return "ANALOG_20";
+	case e_channel_analog_21: return "ANALOG_21";
+	case e_channel_analog_22: return "ANALOG_22";
+	case e_channel_analog_23: return "ANALOG_23";
+	case e_channel_analog_24: return "ANALOG_24";
+	case e_channel_analog_25: return "ANALOG_25";
+	case e_channel_analog_26: return "ANALOG_26";
+	case e_channel_analog_27: return "ANALOG_27";
+	case e_channel_analog_28: return "ANALOG_28";
+	case e_channel_analog_29: return "ANALOG_29";
+	case e_channel_analog_30: return "ANALOG_30";
+	case e_channel_analog_31: return "ANALOG_31";
+	case e_channel_gps_date: return "GPS_DATE";
+	case e_channel_gps_heading: return "GPS_HEADING";
+	case e_channel_gps_altitude: return "GPS_ALTITUDE";
+	case e_channel_session_info: return "SESSION_INFO";
+    default: return "UNKNOWN";
+	}
+
+}
+
 
 e_channel c_channel_data::get_channel_from_data(unsigned char in_data)
 {
@@ -315,15 +377,26 @@ void c_channel_data::write_run_data(FILE * in_output_file)
 
 void c_channel_data::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "CHANNEL_%d:", m_channel);
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
+}
+
+void c_channel_data::write_run(FILE * in_output_file)
+{
+    fwrite(m_data, 1, m_data_length, in_output_file);
 }
 
 void c_channel_data::write_txt_data(FILE * in_output_file)
 {
+    assert(m_data_length >= 2);
     for(int i = 0; i < m_data_length; i++)
-        fprintf(in_output_file, "%02x ", m_data[i]);
+        fprintf(in_output_file, ":%02x", m_data[i]);
     fprintf(in_output_file, "\n");
+}
+
+void c_channel_data::write_txt_channel(FILE * in_output_file)
+{
+    fprintf(in_output_file, "%s", get_channel_name(m_channel));
 }
 
 //
@@ -342,7 +415,7 @@ void c_run_information::set_data(unsigned char * in_data, int in_data_length)
 
 void c_run_information::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "RUN_INFORMATION:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -362,7 +435,7 @@ void c_start_stop::set_data(unsigned char * in_data, int in_data_length)
 
 void c_start_stop::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "START_STOP:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -378,12 +451,18 @@ void c_logger_serial_number::get_description(char * in_buffer, int in_buffer_len
 void c_logger_serial_number::set_data(unsigned char * in_data, int in_data_length)
 {
 	c_channel_data::set_data(in_data, in_data_length);
+
+    m_serial_number = m_data[1] << 8 | m_data[2];
+    m_software_version = m_data[3];
+    m_bootloader_version = m_data[4];
 }
 
 void c_logger_serial_number::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "LOGGER_SERIAL_NUMBER:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
+//    fprintf(in_output_file, "LOGGER_STORAGE:serial_number=%u:software_version=%u:bootload_version=%u\n",
+//        m_serial_number, m_software_version, m_bootloader_version);
 }
 
 
@@ -403,7 +482,7 @@ void c_gps_time_of_week::set_data(unsigned char * in_data, int in_data_length)
 
 void c_gps_time_of_week::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_TIME_OF_WEEK:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -490,7 +569,7 @@ void c_acceleration_data::get_run_sample_data(c_run_sample * in_run_sample)
 
 void c_acceleration_data::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "ACCELERATION_DATA:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -543,7 +622,7 @@ c_time_stamp::c_time_stamp(double in_time_stamp)
 
 void c_time_stamp::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "TIME_STAMP:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -662,7 +741,7 @@ void c_gps_position::get_run_sample_data(c_run_sample * in_run_sample)
 
 void c_gps_position::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_POSITION:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -730,7 +809,7 @@ void c_gps_speed::get_run_sample_data(c_run_sample * in_run_sample)
 
 void c_gps_speed::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_SPEED:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -750,7 +829,7 @@ void c_beacon_pulse::set_data(unsigned char * in_data, int in_data_length)
 
 void c_beacon_pulse::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "BEACON_PULSE:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -770,7 +849,7 @@ void c_gps_pulse::set_data(unsigned char * in_data, int in_data_length)
 
 void c_gps_pulse::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_PULSE:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -825,7 +904,7 @@ e_channel c_frequency_data::input_to_channel(unsigned int in_input)
 
 void c_frequency_data::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "FREQUENCY_DATA:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -894,7 +973,7 @@ void c_rpm_data::get_run_sample_data(c_run_sample * in_run_sample)
 
 void c_rpm_data::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "RPM_DATA:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1058,7 +1137,7 @@ void c_analog_data::get_csv_data(c_csv_data * in_csv_data)
 
 void c_analog_data::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "ANALOG_DATA:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1078,7 +1157,7 @@ void c_gps_date::set_data(unsigned char * in_data, int in_data_length)
 
 void c_gps_date::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_DATE:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1098,7 +1177,7 @@ void c_gps_heading::set_data(unsigned char * in_data, int in_data_length)
 
 void c_gps_heading::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_HEADING:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1133,7 +1212,7 @@ void c_gps_altitude::set_data(unsigned char * in_data, int in_data_length)
 
 void c_gps_altitude::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "GPS_ALTITUDE:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1173,7 +1252,7 @@ void c_session_info::set_data(unsigned char * in_data, int in_data_length)
 
 void c_session_info::write_txt(FILE * in_output_file)
 {
-    fprintf(in_output_file, "SESSION_INFO:");
+    write_txt_channel(in_output_file);
     write_txt_data(in_output_file);
 }
 
@@ -1311,6 +1390,58 @@ c_channel_data * c_channel_data_decoder::get_channel_data(void)
 			}
 		}
 	}
+
+	return channel_data;
+}
+
+//
+// c_txt_decoder
+//
+
+c_txt_decoder::c_txt_decoder(void)
+{
+	m_file = NULL;
+}
+
+void c_txt_decoder::begin(const char * in_file_name)
+{
+	assert(m_file==NULL);
+
+	fopen_s(&m_file, in_file_name, "r");
+}
+
+void c_txt_decoder::end(void)
+{
+    fclose(m_file);
+}
+
+c_channel_data * c_txt_decoder::get_channel_data(void)
+{
+	c_channel_data * channel_data = NULL;
+    char text[256];
+    
+    if (fgets(text, sizeof(text), m_file) != NULL)
+    {
+        size_t len = strlen(text);
+
+        assert(text[len-1] == '\n');
+
+        char * ptr = strchr(text, ':');
+        assert(*ptr == ':');
+        ptr++;
+        e_channel channel = c_channel_data::get_channel_from_data(strtoul(ptr, NULL, 16));
+
+	    assert(channel!=e_channel_invalid);
+
+	    int data_length = c_channel_data::get_data_length_from_channel(channel);
+        uint8_t data[c_channel_data::k_max_data_length];
+
+        for(int i = 0; i < data_length; i++, ptr+=3)
+            data[i] = strtoul(ptr, NULL, 16);
+
+	    channel_data = c_channel_data::contruct(data, data_length);
+    }
+
 
 	return channel_data;
 }
